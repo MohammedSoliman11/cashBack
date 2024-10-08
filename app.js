@@ -14,6 +14,9 @@ app.use(express.json()); // Parsing JSON request bodies
 app.use(cors()); // Enabling Cross-Origin Resource Sharing for all routes
 app.use(morgan("dev")); // Using 'dev' format for HTTP request logging
 
+app.get("/", (req, res, next)=> {
+  return res.send("welcome to the project");
+})
 app.use("/api/v1/auth", authRouter); // Mounting the auth routers
 app.use("/api/v1/users", userRouter); // Mounting the user router at the specified path
 
