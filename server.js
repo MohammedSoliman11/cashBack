@@ -1,12 +1,13 @@
 // Load environment variables from .env file
-const dotenv = require("dotenv");
-dotenv.config({ path: ".env" });
+const dotenv = require('dotenv');
+
+dotenv.config({ path: '.env' });
 
 // Importing required modules and setting up initial configurations
-const app = require("./app.js");
-const startApp = require("./config/firebase/app.js");
-const startServer = require("./config/firebase/server.js");
-const DBConnection = require("./config/database.js"); // Database connection setup
+const app = require('./app');
+const startApp = require('./config/firebase/app');
+const startServer = require('./config/firebase/server');
+const DBConnection = require('./config/database'); // Database connection setup
 
 // Configuring the port to listen on, defaulting to 3000 if not specified in the environment
 const port = process.env.PORT || 3000;

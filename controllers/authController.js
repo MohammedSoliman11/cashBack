@@ -1,5 +1,5 @@
-const User = require("../models/users.js");
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
+const User = require('../models/users');
 
 // Controller function for user registration
 exports.register = async (req, res) => {
@@ -8,7 +8,7 @@ exports.register = async (req, res) => {
     if (req.body.password !== req.body.passwordConfirm) {
       return res
         .status(400)
-        .json({ status: "Bad Request", message: "Passwords don't match" });
+        .json({ status: 'Bad Request', message: "Passwords don't match" });
     }
 
     // Create a new user based on request data
@@ -26,10 +26,12 @@ exports.register = async (req, res) => {
       .createCustomToken(user._id.toString());
 
     // Respond with success status, user data, and the custom token
-    res.status(201).json({ status: "OK", data: user, token: customToken });
+    return res
+      .status(201)
+      .json({ status: 'OK', data: user, token: customToken });
   } catch (err) {
     // Handle registration failure and respond with error status
-    res.status(400).json({ status: "fail", message: err.message });
+    return res.status(400).json({ status: 'fail', message: err.message });
   }
 };
 
@@ -40,14 +42,14 @@ exports.login = async (req, res) => {
 
     // Check if email and password are provided
     if (!email || !password)
-      return res.status(400).json({ status: "Bad Request" });
+      return res.status(400).json({ status: 'Bad Request' });
 
     // Find the user by email and retrieve the hashed password
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select('+password');
 
     // Check if user exists and the provided password is correct
     if (!user || !(await user.correctPassword(password, user.password))) {
-      return res.status(401).json({ message: "Incorrect email or password" });
+      return res.status(401).json({ message: 'Incorrect email or password' });
     }
     user.password = undefined;
     // Generate a custom token for the authenticated user
@@ -55,10 +57,10 @@ exports.login = async (req, res) => {
     const customToken = await admin.auth().createCustomToken(userId);
 
     // Respond with the custom token
-    res.status(201).json({ user, token: customToken });
+    return res.status(201).json({ user, token: customToken });
   } catch (error) {
     // Handle login failure and respond with error status
     console.error(error);
-    res.status(401).json({ message: "Authentication failed" });
+    return res.status(401).json({ message: 'Authentication failed' });
   }
 };

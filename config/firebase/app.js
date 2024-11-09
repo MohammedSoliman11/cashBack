@@ -1,5 +1,6 @@
-require("dotenv").config({ path: "../../.env" }); // To load the environment variables
-const { initializeApp } = require("firebase/app");
+require('dotenv').config({ path: '../../.env' }); // To load the environment variables
+const { initializeApp } = require('firebase/app');
+
 const startApp = () => {
   const firebaseConfig = {
     apiKey: process.env.FIREBASE_APIKEY,
@@ -12,7 +13,7 @@ const startApp = () => {
   };
 
   // Initialize Firebase
-  const init = initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig);
 };
 
 module.exports = startApp;
