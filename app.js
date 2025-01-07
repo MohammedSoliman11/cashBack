@@ -1,7 +1,7 @@
 // Importing required modules
 const express = require('express'); // Express.js for building the web application
 const morgan = require('morgan'); // Morgan for HTTP request logging
-const cors = require('cors'); // Cors for handling Cross-Origin Resource Sharing
+// const cors = require('cors'); // Cors for handling Cross-Origin Resource Sharing
 // const AppError = require("./utils/appError.js");
 const globalErrorHandler = require('./controllers/errorHandle');
 const userRouter = require('./routes/usersRouter');
@@ -11,7 +11,7 @@ const app = express(); // Creating an Express application instance
 
 // Middleware setup
 app.use(express.json()); // Parsing JSON request bodies
-app.use(cors()); // Enabling Cross-Origin Resource Sharing for all routes
+// app.use(cors()); // Enabling Cross-Origin Resource Sharing for all routes
 app.use(morgan('dev')); // Using 'dev' format for HTTP request logging
 app.use('/api/v1/auth', authRouter); // Mounting the auth routers
 app.use('/api/v1/users', userRouter); // Mounting the user router at the specified path
