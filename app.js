@@ -1,7 +1,7 @@
 // Importing required modules
 const express = require('express'); // Express.js for building the web application
 const morgan = require('morgan'); // Morgan for HTTP request logging
-const cors = require('cors'); // Cors for handling Cross-Origin Resource Sharing
+// const cors = require('cors'); // Cors for handling Cross-Origin Resource Sharing
 const cookieParser = require('cookie-parser');
 
 
@@ -14,14 +14,14 @@ const authRouter = require('./routes/authRouter');
 const app = express(); // Creating an Express application instance
 app.use(cookieParser());
 
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// const corsOptions = {
+//   origin: 'http://localhost:5173',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
 
 // Middleware setup
 app.use(express.json()); // Parsing JSON request bodies
-app.use(cors(corsOptions)); // Enabling Cross-Origin Resource Sharing for all routes
+// app.use(cors("*")); // Enabling Cross-Origin Resource Sharing for all routes
 app.use(morgan('dev')); // Using 'dev' format for HTTP request logging
 app.use('/api/v1/auth', authRouter); // Mounting the auth routers
 app.use('/api/v1/users', userRouter); // Mounting the user router at the specified path
