@@ -16,10 +16,6 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
-  balance: {
-    type: Number,
-    default: 0,
-  },
   phone: {
     type: String,
     unique: true,
@@ -41,6 +37,10 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Passwords are not the same!',
     },
+  },
+  numberOfVisits: {
+    type: Number,
+    default: 0,
   },
   CreatedAt: { type: Date, default: new Date() },
   isVerified: { type: Boolean, default: false },
