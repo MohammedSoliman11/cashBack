@@ -71,11 +71,13 @@ exports.login = async (req, res) => {
     // Set the refresh token in an HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      // sameSite: 'Strict',
+      sameSite: 'None', // Allows cross-site requests
+      path: '/', // Cookie valid for all routes
     });
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      // sameSite: 'Strict',
+      sameSite: 'None', // Allows cross-site requests
+      path: '/', // Cookie valid for all routes
     });
 
     // Respond with the custom token
@@ -110,7 +112,8 @@ exports.refreshToken = async (req, res) => {
 
     return res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      // sameSite: 'Strict',
+      sameSite: 'None', // Allows cross-site requests
+      path: '/', // Cookie valid for all routes
     });
   }
   catch (error) {
@@ -124,7 +127,8 @@ exports.logout = async (req, res) => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
     secure: true,
-    // sameSite: 'Strict',
+    sameSite: 'None', // Allows cross-site requests
+    path: '/', // Cookie valid for all routes,
   });
   return res.status(204).json({ message: 'Logged out successfully' });
 };
