@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
       httpOnly: true,
       sameSite: 'Strict',
     });
-    res.cookie('accessToken', refreshToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       sameSite: 'Strict',
     });
