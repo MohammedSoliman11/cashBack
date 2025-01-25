@@ -71,7 +71,10 @@ exports.login = async (req, res) => {
     // Set the refresh token in an HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true, // Set to true if using HTTPS
+      sameSite: 'Strict',
+    });
+    res.cookie('accessToken', refreshToken, {
+      httpOnly: true,
       sameSite: 'Strict',
     });
 
@@ -105,8 +108,10 @@ exports.refreshToken = async (req, res) => {
     // Generate a new access token
     const accessToken = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRES_IN });
 
-    // Respond with the new access token
-    return res.status(201).json({ token: accessToken });
+    return res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      sameSite: 'Strict',
+    });
   }
   catch (error) {
     // Handle token refresh failure and respond with error status
