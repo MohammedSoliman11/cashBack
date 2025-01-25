@@ -8,7 +8,7 @@ const { ACCESS_TOKEN_SECRET } = process.env;
 // Authentication middleware to verify the user's identity using Firebase custom tokens
 const protect = async (req, res, next) => {
   // Extracting the token from the request headers
-  const headerToken = req.cookies.accessToken;
+  const headerToken = req.cookies.refreshToken;
 
   // Check if a token is provided
   if (!headerToken) {
