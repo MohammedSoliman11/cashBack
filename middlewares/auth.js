@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const AppError = require('../utils/appError');
+const User = require('../models/users');
 
 const { ACCESS_TOKEN_SECRET } = process.env;
 
@@ -24,7 +25,8 @@ const protect = async (req, res, next) => {
 
   return jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-    req.user = user;
+    const currentUser = User.findById(user.userId);
+    req.user = currentUser;
     return next();
   });
 };
