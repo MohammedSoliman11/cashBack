@@ -15,15 +15,7 @@ const protect = async (req, res, next) => {
     return next(new AppError('No token provided', 401));
   }
 
-  // Check if the token format is valid
-  if (headerToken && headerToken.split(' ')[0] !== 'Bearer') {
-    return next(new AppError('Invalid token', 401));
-  }
-
-  // Extracting the actual token from the header
-  const token = headerToken.split(' ')[1];
-
-  return jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+  return jwt.verify(headerToken, ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     const currentUser = User.findById(user.userId);
     req.user = currentUser;
