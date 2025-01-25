@@ -1,4 +1,3 @@
-const admin = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const CashBackModel = require('../models/cashLogs');
@@ -29,15 +28,11 @@ exports.register = async (req, res) => {
     };
     const user = await User.create(userData);
     user.password = undefined;
-    // Generate a custom token for the registered user
-    const customToken = await admin
-      .auth()
-      .createCustomToken(user._id.toString());
 
     // Respond with success status, user data, and the custom token
     return res
       .status(201)
-      .json({ status: 'OK', data: user, token: customToken });
+      .json({ status: 'OK', data: user });
   } catch (err) {
     // Handle registration failure and respond with error status
     return res.status(400).json({ status: 'fail', message: err.message });
