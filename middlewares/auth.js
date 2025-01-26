@@ -9,14 +9,18 @@ const { ACCESS_TOKEN_SECRET } = process.env;
 // Authentication middleware to verify the user's identity using Firebase custom tokens
 const protect = async (req, res, next) => {
   // Extracting the token from the request headers
-  const headerToken = req.cookies.accessToken;
+  const headerToken = req.headers.authorization; // Fix the extraction of the token
+  // console.log(headerToken);
 
-  // Check if a token is provided
-  if (!headerToken) {
-    return next(new AppError('Un authenticated. Please login first.', 401));
+  if(!headerToken) {
+    return next(new AppError('Unauthenticated. Please login first.', 401));
+  }
+  const token = headerToken.split(' ')[1];
+  if(!token) {
+    return next(new AppError('Unauthenticated. Please login first.', 401));
   }
 
-  return jwt.verify(headerToken, ACCESS_TOKEN_SECRET,async (err, user) => {
+  return jwt.verify(token, ACCESS_TOKEN_SECRET,async (err, user) => {
     if (err) return res.sendStatus(403);
     const currentUser = await User.findOne({ _id: new mongoose.Types.ObjectId(user.userId) });
     req.user = currentUser;

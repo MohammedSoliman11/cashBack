@@ -18,10 +18,10 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 }));
-app.use(cookieParser());
 
 // Middleware setup
 app.use(express.json()); // Parsing JSON request bodies
+app.use(cookieParser());
 
 // Enable CORS with the desired configuration
 

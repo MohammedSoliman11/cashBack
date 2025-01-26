@@ -5,7 +5,6 @@ const CashBackModel = require('../models/cashLogs');
 const { 
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
-  REFRESH_TOKEN_EXPIRES_IN,
   ACCESS_TOKEN_EXPIRES_IN,
 } = process.env;
 
@@ -65,26 +64,31 @@ exports.login = async (req, res) => {
     
     // Generate tokens
     const accessToken = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRES_IN });
-    const refreshToken = jwt.sign({ userId }, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRES_IN });
+    // const refreshToken = jwt.sign({ userId }, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRES_IN });
 
 
     // Set the refresh token in an HTTP-only cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      sameSite: 'None', // Allows cross-site requests
-      path: '/', // Cookie valid for all routes
-    });
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite: 'None', // Allows cross-site requests
-      path: '/', // Cookie valid for all routes
-    });
+    // res.cookie('refreshToken', refreshToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'None', // Allows cross-site requests
+    //   path: '/', // Cookie valid for all routes
+    // });
+    // res.cookie('accessToken', accessToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'None', // Allows cross-site requests
+    //   path: '/', // Cookie valid for all routes
+    // });
+
+    // console.log(res.cookie);
+    // console.log(res.cookie);
 
     // Respond with the custom token
     return res.status(201).json({ user, token: accessToken });
   } catch (error) {
     // Handle login failure and respond with error status
-    console.error(error);
+    // console.error(error);
     return res.status(401).json({ message: 'Authentication failed' });
   }
 };
@@ -112,6 +116,7 @@ exports.refreshToken = async (req, res) => {
 
     return res.cookie('accessToken', accessToken, {
       httpOnly: true,
+      secure: true,
       sameSite: 'None', // Allows cross-site requests
       path: '/', // Cookie valid for all routes
     });
