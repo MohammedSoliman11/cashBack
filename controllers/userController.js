@@ -1,8 +1,10 @@
-// Controller function to get information about the authenticated user
 exports.getMe = async (req, res) => {
-  if (!req.user) {
-    return res.status(404).json({ status: 'User Not Found' });
+  try {
+    if (!req.user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.json(req.user.toObject());
+  } catch (err) {
+    return res.status(401).json({ message: 'Authentication failed' });
   }
-  const { user } = req;
-  return res.status(200).json({ status: 'OK', data: user });
 };

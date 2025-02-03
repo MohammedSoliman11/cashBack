@@ -32,3 +32,54 @@ exports.verifyPhone = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+// Controller function for refreshing the access token
+exports.refreshToken = async (req, res) => {
+  try {
+    // Get the refresh token from the cookie
+    const { refreshToken } = req.cookies;
+
+    // Check if a refresh token is provided
+    if (!refreshToken)
+      return res.status(401).json({ message: 'Not Authorized' });
+
+    // Verify the refresh token
+    const decoded = jwt.verify(
+      refreshToken,
+      REFRESH_TOKEN_SECRET,
+      (err, userId) => {
+        if (err)
+          return res.status(401).json({ message: 'Token refresh failed' });
+        return userId;
+      },
+    );
+
+    const { userId } = decoded;
+
+    // Generate a new access token
+    const accessToken = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+    });
+
+    return res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None', // Allows cross-site requests
+      path: '/', // Cookie valid for all routes
+    });
+  } catch (error) {
+    // Handle token refresh failure and respond with error status
+    console.error(error);
+    return res.status(401).json({ message: 'Token refresh failed' });
+  }
+};
+
+exports.logout = async (req, res) => {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None', // Allows cross-site requests
+    path: '/', // Cookie valid for all routes,
+  });
+  return res.status(204).json({ message: 'Logged out successfully' });
+};

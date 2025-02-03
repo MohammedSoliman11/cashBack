@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same!',
     },
   },
+  numberOfVisits: {
+    type: Number,
+    default: 0,
+  },
   CreatedAt: { type: Date, default: new Date() },
   isVerified: { type: Boolean, default: false },
   isDeleted: { type: Boolean, default: false },

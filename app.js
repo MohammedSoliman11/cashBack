@@ -8,6 +8,14 @@ const userRouter = require('./routes/usersRouter');
 const authRouter = require('./routes/authRouter');
 
 const app = express(); // Creating an Express application instance
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // React app's origin
+    credentials: true, // Allow cookies and credentials
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  }),
+);
 
 // Middleware setup
 app.use(express.json()); // Parsing JSON request bodies

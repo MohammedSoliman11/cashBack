@@ -1,46 +1,31 @@
-const { getAuth, signInWithCustomToken } = require('firebase/auth');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+
 const AppError = require('../utils/appError');
 const User = require('../models/users');
+
+const { ACCESS_TOKEN_SECRET } = process.env;
 
 // Authentication middleware to verify the user's identity using Firebase custom tokens
 const protect = async (req, res, next) => {
   // Extracting the token from the request headers
-  const headerToken = req.headers.authorization;
+  const headerToken = req.headers.authorization; // Fix the extraction of the token
+  // console.log(headerToken);
 
-  // Check if a token is provided
-  if (!headerToken) {
-    return next(new AppError('No token provided', 401));
+  if(!headerToken) {
+    return next(new AppError('Unauthenticated. Please login first.', 401));
   }
-
-  // Check if the token format is valid
-  if (headerToken && headerToken.split(' ')[0] !== 'Bearer') {
-    return next(new AppError('Invalid token', 401));
-  }
-
-  // Extracting the actual token from the header
   const token = headerToken.split(' ')[1];
-
-  // Initializing Firebase authentication
-  const auth = getAuth();
-
-  // Verifying the token with Firebase authentication
-  const userId = await signInWithCustomToken(auth, token)
-    .then((userCredential) => userCredential.user.uid)
-    .catch((err) => {
-      next(new AppError(`Unauthorized ${err.message}`, 401));
-    });
-
-  if (!userId) {
-    return next(new AppError('Unauthorized', 401));
+  if(!token) {
+    return next(new AppError('Unauthenticated. Please login first.', 401));
   }
-  // Fetching the user based on the verified user ID
-  const user = await User.findById(userId).select('-password');
 
-  // Storing the user information in the request object for further use
-  req.user = user;
-
-  // Passing control to the next middleware or route handler
-  return next();
+  return jwt.verify(token, ACCESS_TOKEN_SECRET,async (err, user) => {
+    if (err) return res.sendStatus(403);
+    const currentUser = await User.findOne({ _id: new mongoose.Types.ObjectId(user.userId) });
+    req.user = currentUser;
+    return next();
+  });
 };
 
 module.exports = protect;
