@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
@@ -12,17 +13,19 @@ const protect = async (req, res, next) => {
   const headerToken = req.headers.authorization; // Fix the extraction of the token
   // console.log(headerToken);
 
-  if(!headerToken) {
+  if (!headerToken) {
     return next(new AppError('Unauthenticated. Please login first.', 401));
   }
   const token = headerToken.split(' ')[1];
-  if(!token) {
+  if (!token) {
     return next(new AppError('Unauthenticated. Please login first.', 401));
   }
 
-  return jwt.verify(token, ACCESS_TOKEN_SECRET,async (err, user) => {
+  return jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, user) => {
     if (err) return res.sendStatus(403);
-    const currentUser = await User.findOne({ _id: new mongoose.Types.ObjectId(user.userId) });
+    const currentUser = await User.findOne({
+      _id: new mongoose.Types.ObjectId(user.userId),
+    });
     req.user = currentUser;
     return next();
   });
