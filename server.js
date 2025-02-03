@@ -5,8 +5,8 @@ dotenv.config({ path: '.env' });
 
 // Importing required modules and setting up initial configurations
 const app = require('./app');
-const startApp = require('./config/firebase/app');
-const startServer = require('./config/firebase/server');
+// const startApp = require('./config/firebase/app');
+// const startServer = require('./config/firebase/server');
 const DBConnection = require('./config/database'); // Database connection setup
 
 // Configuring the port to listen on, defaulting to 3000 if not specified in the environment
@@ -19,10 +19,10 @@ const DB = process.env.MONGODB_URL;
 DBConnection(DB);
 
 // Initializing the Firebase client
-startApp();
+// startApp();
 
 // Starting the Firebase server
-startServer();
+// startServer();
 
 // Starting the Express server to listen on the specified port
 app.listen(port, () => {

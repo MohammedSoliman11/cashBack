@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
+  authToken: {
+    type: String,
+  },
   balance: {
     type: Number,
     default: 0,

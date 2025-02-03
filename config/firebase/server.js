@@ -7,10 +7,10 @@ const serviceAccount = JSON.parse(
   Buffer.from(serviceAccountBase64, 'base64').toString('utf-8'),
 );
 
-const startServer = () => {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-};
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
-module.exports = startServer;
+const auth = admin.auth();
+
+module.exports = auth;
